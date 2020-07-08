@@ -5,13 +5,12 @@ import string
 import sys
 import time
 from datetime import datetime
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
 import global_var
 from insert_on_databsae import insert_in_Local
-
+import wx
+app = wx.App()
 
 def choromedriver():
 
@@ -29,29 +28,23 @@ def choromedriver():
     Day = To_date[8:10]
     To_date = Month + '/' + Day + '/' + Year
 
-    OG_URL = 'https://procure.ohio.gov/proc/searchProcOppsResults.asp?t1=0&IN=&DBN=&SK=&MT=All&KST=All%20Words&OT=0&OSTAT=Active&SDT=POST&SD=10/25/2019&ED=10/29/2019&A=All&AT=All&OTT=All&SDTT=Search%20by%20Posted%20Date&MTT=&OSTATT=Active'
+    # OG_URL = 'https://procure.ohio.gov/proc/searchProcOppsResults.asp?t1=0&IN=&DBN=&SK=&MT=All&KST=All%20Words&OT=0&OSTAT=Active&SDT=POST&SD=10/25/2019&ED=10/29/2019&A=All&AT=All&OTT=All&SDTT=Search%20by%20Posted%20Date&MTT=&OSTATT=Active'
 
     Custom_URL = "https://procure.ohio.gov/proc/searchProcOppsResults.asp?t1=0&IN=&DBN=&SK=&MT=All&KST=All%20Words&OT=0&OSTAT=Active&SDT=POST&SD="+str(From_date)+"&ED="+str(To_date)+"&A=All&AT=All&OTT=All&SDTT=Search%20by%20Posted%20Date&MTT=&OSTATT=Active"
 
-    File_Location = open("D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\procure.ohio.gov\\Location For Database & Driver.txt", "r")
-    TXT_File_AllText = File_Location.read()
-    Chromedriver = str(TXT_File_AllText).partition("Driver=")[2].partition("\")")[0].strip()
+    # File_Location = open("D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\procure.ohio.gov\\Location For Database & Driver.txt", "r")
+    # TXT_File_AllText = File_Location.read()
+    # Chromedriver = str(TXT_File_AllText).partition("Driver=")[2].partition("\")")[0].strip()
     # chrome_options = Options()
     # chrome_options.add_extension('D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\procure.ohio.gov\\Browsec-VPN.crx')  # ADD EXTENSION Browsec-VPN
     # browser = webdriver.Chrome(executable_path=str(Chromedriver),
     #                            chrome_options=chrome_options)
-    browser = webdriver.Chrome(executable_path=str(Chromedriver))
-    browser.get(
-        """https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
-    for Add_Extension in browser.find_elements_by_xpath('/html/body/div[4]/div[2]/div/div/div[2]/div[2]/div'):
-        Add_Extension.click()
-        break
-    import wx
-    app = wx.App()
+    # browser = webdriver.Chrome(executable_path=str(Chromedriver))
+    browser = webdriver.Chrome(executable_path=str(f"C:\\chromedriver.exe"))
+    browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
     wx.MessageBox(' -_-  Add Extension and Select Proxy Between 30 SEC -_- ', 'Info', wx.OK | wx.ICON_WARNING)
     time.sleep(30)  # WAIT UNTIL CHANGE THE MANUAL VPN SETTING
     browser.get(Custom_URL)
-    browser.set_window_size(1024, 600)
     browser.maximize_window()
     # browser.switch_to.window(browser.window_handles[1])
     # browser.close()
@@ -76,8 +69,7 @@ def clicking_process(browser):
             Record_not_found = Record_not_found.get_attribute('innerText').strip()
             if Record_not_found == "No records found!":
                 ctypes.windll.user32.MessageBoxW(0, " ♥ Record Not Found ! ♥ " "procure.ohio.gov", 1)
-                global_var.Process_End()
-                browser.quit()
+                browser.close()
                 sys.exit()
             break
     except:pass
@@ -85,6 +77,10 @@ def clicking_process(browser):
     for Tender_href in browser.find_elements_by_xpath('//*[@id="full"]/table/tbody//td[7]/a'):
         Tender_href = Tender_href.get_attribute('href')
         List_Of_Tender_Href.append(Tender_href)
+    if len(List_Of_Tender_Href) == 0:
+        ctypes.windll.user32.MessageBoxW(0, " ♥ Record Not Found ! ♥ " "procure.ohio.gov", 1)
+        browser.close()
+        sys.exit()
     a = True
     while a == True:
         try:
@@ -191,23 +187,19 @@ def clicking_process(browser):
                 # Source Name
                 SegFeild[31] = 'procure.ohio.gov'
 
-                for Segdata in range(len(SegFeild)):
-                    print(Segdata, end=' ')
-                    print(SegFeild[Segdata])
-                    SegFeild = [SegFeild.replace("&quot;", "\"") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&QUOT;", "\"") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&nbsp;", " ") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&NBSP;", " ") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&amp;amp", "&") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&AMP;AMP", "&") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&amp;", "&") for SegFeild in SegFeild]
-                    SegFeild = [SegFeild.replace("&AMP;", "&") for SegFeild in SegFeild]
+                for SegIndex in range(len(SegFeild)):
+                    print(SegIndex, end=' ')
+                    print(SegFeild[SegIndex])
+                    SegFeild[SegIndex] = html.unescape(str(SegFeild[SegIndex]))
+                    SegFeild[SegIndex] = str(SegFeild[SegIndex]).replace("'", "''")
+                if len(SegFeild[19]) >= 200:
+                    SegFeild[19] = str(SegFeild[19])[:200]+'...'
+
+                if len(SegFeild[18]) >= 1500:
+                    SegFeild[18] = str(SegFeild[18])[:1500]+'...'
+
                 check_date(get_htmlsource, SegFeild)
-                print(" Total: " + str(global_var.Total) + " Duplicate: " + str(
-            global_var.duplicate) + " Expired: " + str(global_var.expired) + " Inserted: " + str(
-            global_var.inserted) + " Skipped: " + str(
-            global_var.skipped) + " Deadline Not given: " + str(
-            global_var.deadline_Not_given) + " QC Tenders: " + str(global_var.QC_Tenders),'\n')
+                print(" Total: " + str(global_var.Total) + " Duplicate: " + str(global_var.duplicate) + " Expired: " + str(global_var.expired) + " Inserted: " + str(global_var.inserted) + " Skipped: " + str(global_var.skipped) + " Deadline Not given: " + str(global_var.deadline_Not_given) + " QC Tenders: " + str(global_var.QC_Tenders),'\n')
                 a = False
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -227,47 +219,26 @@ def clicking_process(browser):
 
 
 def check_date(get_htmlSource, SegFeild):
-    tender_date = str(SegFeild[24])
-    nowdate = datetime.now()
-    date2 = nowdate.strftime("%Y-%m-%d")
+    deadline = str(SegFeild[24])
+    curdate = datetime.now()
+    curdate_str = curdate.strftime("%Y-%m-%d")
     try:
-        if tender_date != '':
-            deadline = time.strptime(tender_date , "%Y-%m-%d")
-            currentdate = time.strptime(date2 , "%Y-%m-%d")
-            if deadline > currentdate:
+        if deadline != '':
+            datetime_object_deadline = datetime.strptime(deadline, '%Y-%m-%d')
+            datetime_object_curdate = datetime.strptime(curdate_str, '%Y-%m-%d')
+            timedelta_obj = datetime_object_deadline - datetime_object_curdate
+            day = timedelta_obj.days
+            if day > 0:
                 insert_in_Local(get_htmlSource, SegFeild)
             else:
-                print("Tender Expired")
+                print("Expired Tender")
                 global_var.expired += 1
         else:
-            print("Deadline was not given")
+            print("Deadline Not Given")
             global_var.deadline_Not_given += 1
     except Exception as e:
         exc_type , exc_obj , exc_tb = sys.exc_info()
         fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print("Error ON : " , sys._getframe().f_code.co_name + "--> " + str(e) , "\n" , exc_type , "\n" , fname , "\n" , exc_tb.tb_lineno)
+        print("Error ON : " , sys._getframe().f_code.co_name + "--> " + str(e) , "\n" , exc_type , "\n" , fname , "\n" ,exc_tb.tb_lineno)
 
 choromedriver()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
