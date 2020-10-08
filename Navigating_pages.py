@@ -89,7 +89,7 @@ def clicking_process(browser):
                 browser.get(href)
                 global_var.Total += 1
                 SegFeild = []
-                for data in range(42):
+                for data in range(45):
                     SegFeild.append('')
 
                 for get_htmlsource in browser.find_elements_by_xpath('//*[@id="left"]'):
@@ -186,6 +186,10 @@ def clicking_process(browser):
 
                 # Source Name
                 SegFeild[31] = 'procure.ohio.gov'
+                SegFeild[20] = ''
+                SegFeild[21] = ''
+                SegFeild[42] = SegFeild[7]
+                SegFeild[43] = ''
 
                 for SegIndex in range(len(SegFeild)):
                     print(SegIndex, end=' ')
