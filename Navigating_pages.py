@@ -31,34 +31,14 @@ def choromedriver():
     # OG_URL = 'https://procure.ohio.gov/proc/searchProcOppsResults.asp?t1=0&IN=&DBN=&SK=&MT=All&KST=All%20Words&OT=0&OSTAT=Active&SDT=POST&SD=10/25/2019&ED=10/29/2019&A=All&AT=All&OTT=All&SDTT=Search%20by%20Posted%20Date&MTT=&OSTATT=Active'
 
     Custom_URL = "https://procure.ohio.gov/proc/searchProcOppsResults.asp?t1=0&IN=&DBN=&SK=&MT=All&KST=All%20Words&OT=0&OSTAT=Active&SDT=POST&SD="+str(From_date)+"&ED="+str(To_date)+"&A=All&AT=All&OTT=All&SDTT=Search%20by%20Posted%20Date&MTT=&OSTATT=Active"
-
-    # File_Location = open("D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\procure.ohio.gov\\Location For Database & Driver.txt", "r")
-    # TXT_File_AllText = File_Location.read()
-    # Chromedriver = str(TXT_File_AllText).partition("Driver=")[2].partition("\")")[0].strip()
-    # chrome_options = Options()
-    # chrome_options.add_extension('D:\\0 PYTHON EXE SQL CONNECTION & DRIVER PATH\\procure.ohio.gov\\Browsec-VPN.crx')  # ADD EXTENSION Browsec-VPN
-    # browser = webdriver.Chrome(executable_path=str(Chromedriver),
-    #                            chrome_options=chrome_options)
-    # browser = webdriver.Chrome(executable_path=str(Chromedriver))
-    browser = webdriver.Chrome(executable_path=str(f"C:\\chromedriver.exe"))
-    browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
-    wx.MessageBox(' -_-  Add Extension and Select Proxy Between 30 SEC -_- ', 'Info', wx.OK | wx.ICON_WARNING)
-    time.sleep(30)  # WAIT UNTIL CHANGE THE MANUAL VPN SETTING
-    browser.get(Custom_URL)
+    chrome_options = Options()
+    chrome_options.add_extension('C:\\BrowsecVPN.crx')
+    browser = webdriver.Chrome(executable_path=str(f"C:\\chromedriver.exe"),chrome_options=chrome_options)
     browser.maximize_window()
-    # browser.switch_to.window(browser.window_handles[1])
-    # browser.close()
-    # browser.switch_to.window(browser.window_handles[0])
-    # time.sleep(2)
-    time.sleep(1)
-    # time.sleep(20)  # WAIT UNTIL CHANGE THE MANUAL VPN SETTING
-    # browser.get(Custom_URL)
-
-    # browser.set_window_size(1024, 600)
-    # browser.maximize_window()
-    # browser.switch_to.window(browser.window_handles[1])
-    # browser.close()
-    # browser.switch_to.window(browser.window_handles[0])
+    # browser.get("""https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh?hl=en" ping="/url?sa=t&amp;source=web&amp;rct=j&amp;url=https://chrome.google.com/webstore/detail/browsec-vpn-free-and-unli/omghfjlpggmjjaagoclmmobgdodcjboh%3Fhl%3Den&amp;ved=2ahUKEwivq8rjlcHmAhVtxzgGHZ-JBMgQFjAAegQIAhAB""")
+    wx.MessageBox(' -_-  Add Extension and Select Proxy Between 10 SEC -_- ', 'Info', wx.OK | wx.ICON_WARNING)
+    time.sleep(15)  # WAIT UNTIL CHANGE THE MANUAL VPN SETtING
+    browser.get(Custom_URL)
     clicking_process(browser)
 
 
